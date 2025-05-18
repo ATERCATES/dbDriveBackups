@@ -22,7 +22,7 @@ Automated system for backing up PostgreSQL databases and storing them on Google 
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/dbDriveBackups.git
+   git clone https://github.com/ATERCATES/dbDriveBackups.git
    cd dbDriveBackups
    ```
 
