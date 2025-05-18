@@ -1,0 +1,21 @@
+# Environment variables
+.env
+
+# Temporary files
+*.tmp
+*.temp
+/tmp
+
+# Logs
+*.log
+logs/
+
+# Backup files
+*.bak
+*.backup
+*.sql
+*.sql.gz
+
+# System files
+.DS_Store
+Thumbs.db
