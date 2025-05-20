@@ -25,18 +25,18 @@ REMOTE_NAME=${REMOTE_NAME:-"gdrive"}
 restore_database() {
     local backup_file="$1"
     
-    echo -e "\n🔄 Restoring database from backup file: $(basename "$backup_file")"
+    echo -e "\n🔄 Restoring database from backup file: $(basename "$backup_file")\n"
     
     # Check if database exists, create if not
     if ! psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -lqt | cut -d \| -f 1 | grep -qw "$DB_NAME"; then
-        echo "📦 Creating database $DB_NAME..."
+        echo -e "📦 Creating database $DB_NAME...\n"
         createdb -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" "$DB_NAME" || {
             echo "❌ Failed to create database."
             return 1
         }
     else
         # Terminate existing connections
-        echo -e "\n🔌 Disconnecting existing users...\n"
+        echo -e "🔌 Disconnecting existing users...\n"
         psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -c "
             SELECT pg_terminate_backend(pg_stat_activity.pid)
             FROM pg_stat_activity
@@ -45,7 +45,7 @@ restore_database() {
     fi
     
     # Restore database using pg_restore
-    echo "\n⏳ Restoring data... (this may take a while)"
+    echo "⏳ Restoring data... (this may take a while)"
     if pg_restore -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --clean --if-exists "$backup_file"; then
         echo -e "\n✅ Database restored successfully!"
         return 0
