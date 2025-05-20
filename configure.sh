@@ -3,7 +3,7 @@
 # Initial configuration for the backup system
 # Configures necessary tools for backing up to Google Drive
 #
-# Version: 1.0.0
+# Version: 1.0.2
 #
 
 set -euo pipefail

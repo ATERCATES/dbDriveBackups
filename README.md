@@ -10,6 +10,7 @@ Automated system for backing up PostgreSQL databases and storing them on Google 
 - Manages backup retention (removes old backups)
 - Preserves monthly backups for long-term storage
 - Automatic crontab scheduling
+- Interactive restore functionality
 
 ## Requirements
 
@@ -44,6 +45,11 @@ Run the backup script manually:
 ./backupdb.sh
 ```
 
+Restore a backup interactively:
+```bash
+./restoredb.sh
+```
+
 ### Scheduling Backups
 
 When running the configuration script, you'll be asked if you want to set up automated backups with crontab. 
@@ -67,6 +73,7 @@ dbDriveBackups/
 ├── .env.template    # Environment variables template
 ├── .env             # Environment variables file (not included in git)
 ├── backupdb.sh      # Main backup script
+├── restoredb.sh     # Interactive restore script
 ├── configure.sh     # Initial configuration script
 ├── logs/            # Log files directory
 ├── LICENSE          # Project license

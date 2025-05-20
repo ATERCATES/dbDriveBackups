@@ -3,7 +3,7 @@
 # Database Backup to Google Drive
 # Performs PostgreSQL backups and stores them on Google Drive
 # 
-# Version: 1.0.1
+# Version: 1.0.2
 #
 
 # Set secure configuration for the script
@@ -60,7 +60,7 @@ BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS:-7}
 
 # Date and names
 DATE=$(date +%F)
-FILE_NAME="${DB_NAME}_${DATE}.sql.gz"
+FILE_NAME="${DB_NAME}_${DATE}.pgdump"  # Changed extension from .tar to .pgdump to reflect actual format
 LOCAL_PATH="/tmp/${FILE_NAME}"
 BACKUP_DIR=${BACKUP_DIR:-"dbBackups"}
 MONTHLY_BACKUP_DIR=${BACKUP_DIR_MONTHLY:-"dbBackups/monthly"}
@@ -75,9 +75,9 @@ LOG_FILE="${LOG_DIR}/backup_$(date +%Y-%m-%d).log"
 
 log_message "INFO" "Starting backup of $DB_NAME"
 
-# Create compressed local copy
-log_message "INFO" "Creating local copy at $LOCAL_PATH"
-if ! pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" | gzip > "$LOCAL_PATH"; then
+# Create backup using PostgreSQL's custom format
+log_message "INFO" "Creating local backup at $LOCAL_PATH"
+if ! pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -Fc -f "$LOCAL_PATH"; then
     log_message "ERROR" "Error creating backup of database $DB_NAME"
     send_email "❌ Backup ERROR [$DATE]" "❌ Error creating backup of database $DB_NAME on $DATE"
     exit 1
@@ -129,7 +129,8 @@ MESSAGE="✅ Backup successfully completed.
 
 🔹 File: $FILE_NAME
 📁 Location: Google Drive - $BACKUP_DIR/
-📏 Local size: $BACKUP_SIZE"
+📏 Local size: $BACKUP_SIZE
+📝 Format: Custom PostgreSQL format (allows selective table restoration)"
 
 if [ "$(date +%d)" == "01" ]; then
     MESSAGE+="
