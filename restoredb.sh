@@ -36,7 +36,7 @@ restore_database() {
         }
     else
         # Terminate existing connections
-        echo -e "\n🔌 Disconnecting existing users..."
+        echo -e "\n🔌 Disconnecting existing users...\n"
         psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -c "
             SELECT pg_terminate_backend(pg_stat_activity.pid)
             FROM pg_stat_activity
